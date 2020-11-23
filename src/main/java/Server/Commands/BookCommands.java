@@ -23,19 +23,27 @@ public class BookCommands {
     }
 
     private static ArrayList<String> showBook() {
-        List<BookEntity> list = HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("from BookEntity ").getResultList();
+        List<BookEntity> list = null;
         ArrayList<String> list2=new ArrayList<>();
+        try {
+            list = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                    createQuery("from BookEntity").list();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         for (BookEntity book:list) {
             String id= String.valueOf(book.getId_book());
             String name=book.getName();
             String author=book.getAuthor();
             String type=book.getType();
-            String amount= String.valueOf(book.getAmount());
             String price= String.valueOf(book.getPrice());
-            list2.add(id+" "+name+" "+author+" "+type+" "+amount+" "+price);
+            String amount= String.valueOf(book.getAmount());
+
+            list2.add(id+" "+name+" "+author+" "+type+" "+price+" "+amount);
         }
-       return list2;
+        return list2;
+
     }
     public static void updateBook(BookEntity book){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
