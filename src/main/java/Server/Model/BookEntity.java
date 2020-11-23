@@ -1,54 +1,48 @@
 package Server.Model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
+
 
 @Entity
 @Table(name = "books")
-public class BookEntity {
+public class BookEntity implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_book;
     @Column(name = "name")
     private String name;
-    @Column(name = "type")
-    private String type;
     @Column(name = "author")
     private String author;
+    @Column(name = "type")
+    private String type;
     @Column(name = "amount")
     private int amount;
     @Column(name = "price")
     private double price;
-    @OneToMany(fetch = FetchType.LAZY,
-            mappedBy = "book",
+   @OneToMany(fetch = FetchType.LAZY,
+           mappedBy = "book",
             cascade = CascadeType.ALL)
     private List<BasketEntity> basketList;
 
     public BookEntity(){}
 
-    public BookEntity(int idBook,String name, String author, String type,  int amount, double price){
-        this.id_book=idBook;
+    public BookEntity(int idbook, String name, String author, String type, int amount, int price){
+        this.id_book=idbook;
+        this.type=type;
         this.name=name;
         this.author=author;
-        this.type=type;
         this.amount=amount;
         this.price=price;
     }
-    public List<BasketEntity> getBasketList() {
-        return basketList;
-    }
 
-    public void setBasketList(List<BasketEntity> basketList) {
-        this.basketList = basketList;
-    }
-
-    public int getIdbook() {
+    public int getId_book() {
         return id_book;
     }
 
-    public void setIdbook(int idBook) {
-        this.id_book = idBook;
+    public void setId_book(int idbook) {
+        this.id_book = idbook;
     }
 
 
@@ -77,6 +71,7 @@ public class BookEntity {
         this.author = author;
     }
 
+
     public int getAmount() {
         return amount;
     }
@@ -94,6 +89,14 @@ public class BookEntity {
         this.price = price;
     }
 
+    public List<BasketEntity> getBasketList() {
+        return basketList;
+    }
+
+    public void setBasketList(List<BasketEntity> basketList) {
+        this.basketList = basketList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,14 +108,9 @@ public class BookEntity {
         if (amount != that.amount) return false;
         if (type != null ? !type.equals(that.type) : that.type != null) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (author != null ? !author.equals(that.author) : that.author != null) return false;
         if (price!= that.price) return false;
 
         return true;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id_book, getName(), getType(), getAuthor(), getAmount(), getPrice());
-    }
 }

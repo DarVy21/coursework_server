@@ -18,6 +18,10 @@ public class UsersEntity implements Serializable {
             mappedBy = "user",
             cascade = CascadeType.ALL)
     private List<BasketEntity> basketList;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<AdminEntity> adminEntities;
 
     public UsersEntity(){}
     public UsersEntity(int idUser, String login, String password){

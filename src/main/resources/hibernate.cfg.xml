@@ -16,7 +16,7 @@
     <mapping class="Server.Model.UsersEntity"/>
     <mapping class="Server.Model.BasketEntity"/>
     <mapping class="Server.Model.OrdersEntity"/>
-
+    <mapping class="Server.Model.AdminEntity"/>
 
   </session-factory>
 </hibernate-configuration>

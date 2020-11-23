@@ -8,7 +8,7 @@ public class OrderCommands {
         switch (commandNumber[1]) {
             case "checkSingInClient":
                 commands = command.split(",", 4);
-                // result = UserCommands.checkSingInClient(commands[2],commands[3]);
+               // result = UserCommands.checkSingInClient(commands[2],commands[3]);
                 break;
         }
         return result;

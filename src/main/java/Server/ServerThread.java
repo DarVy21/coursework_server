@@ -1,10 +1,12 @@
 package Server;
 
+import Server.Commands.Commands;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import Server.Commands.Commands;
+
 
 
 public class ServerThread extends Thread {
