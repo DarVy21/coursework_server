@@ -14,13 +14,11 @@ public class BasketEntity implements Serializable {
     private double price;
     @Column(name = "amount")
     private int amount;
-    @ManyToOne(fetch= FetchType.LAZY,
-            cascade= CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id_user")
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name = "user_id", referencedColumnName = "id_user")
     private UsersEntity user;
-    @ManyToOne(fetch= FetchType.LAZY,
-            cascade= CascadeType.ALL)
-    @JoinColumn(name = "book_name", referencedColumnName = "name")
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name = "book_name", referencedColumnName = "name")
     private BookEntity book;
     public BasketEntity(){}
 

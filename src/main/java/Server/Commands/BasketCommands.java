@@ -13,6 +13,7 @@ import java.util.List;
 
 public class BasketCommands {
     public static Object split(String command) {
+        String com =command;
         String[] commandNumber = command.split(",", 3);
         String[] commands;
         Object result = true;
@@ -22,6 +23,7 @@ public class BasketCommands {
                 result = BasketCommands.addToBasket(commands[2], commands[3], commands[4]);
                 break;
             case "ShowBasket":
+
                 commands = command.split(",", 3);
                 result = BasketCommands.showBasket(commands[2]);
                 break;
@@ -38,7 +40,7 @@ public class BasketCommands {
         Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
         List<BasketEntity> list= session.createQuery("from BasketEntity where idBasket=:id").setParameter("id",id).list();
         session.close();
-        BasketEntity basket=new BasketEntity();
+        BasketEntity basket= new BasketEntity();
         basket= list.get(0);
         BasketCommands.delete(basket);
         return "success";
