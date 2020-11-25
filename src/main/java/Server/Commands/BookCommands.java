@@ -40,7 +40,8 @@ public class BookCommands {
             String price= String.valueOf(book.getPrice());
             String amount= String.valueOf(book.getAmount());
 
-            list2.add(id+" "+name+" "+author+" "+type+" "+price+" "+amount);
+            list2.add(id+","+name+","+author+","+type+","+price+","+amount);
+
         }
         return list2;
 

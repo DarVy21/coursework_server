@@ -22,6 +22,10 @@ public class UsersEntity implements Serializable {
             mappedBy = "user",
             cascade = CascadeType.ALL)
     private List<AdminEntity> adminEntities;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "user",
+            cascade = CascadeType.ALL)
+    private List<OrdersEntity> ordersEntities;
 
     public UsersEntity(){}
     public UsersEntity(int idUser, String login, String password){
@@ -62,6 +66,23 @@ public class UsersEntity implements Serializable {
     public void setBasketList(List<BasketEntity> basketList) {
         this.basketList = basketList;
     }
+
+    public List<AdminEntity> getAdminEntities() {
+        return adminEntities;
+    }
+
+    public void setAdminEntities(List<AdminEntity> adminEntities) {
+        this.adminEntities = adminEntities;
+    }
+
+    public List<OrdersEntity> getOrdersEntities() {
+        return ordersEntities;
+    }
+
+    public void setOrdersEntities(List<OrdersEntity> ordersEntities) {
+        this.ordersEntities = ordersEntities;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

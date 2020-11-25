@@ -7,23 +7,23 @@ import java.util.Objects;
 @Table(name = "orders")
 public class OrdersEntity {
     @Id
-    @Column(name = "id_order")
+    @Column(name = "order_number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idOrder;
+    private int orderNumber;
     @Column(name = "total_price")
     private double totalPrice;
-    @Column(name = "total_amount")
-    private int totalAmount;
     @Column(name = "status")
-    private String status;
+    private String status="в обработке";
+    @ManyToOne (fetch=FetchType.LAZY)
+    @JoinColumn (name = "user_name", referencedColumnName = "login")
+    private UsersEntity user;
 
-
-    public int getIdOrder() {
-        return idOrder;
+    public int getOrderNumber() {
+        return orderNumber;
     }
 
-    public void setIdOrder(int idOrder) {
-        this.idOrder = idOrder;
+    public void setOrderNumber(int idOrder) {
+        this.orderNumber = idOrder;
     }
 
 
@@ -35,16 +35,6 @@ public class OrdersEntity {
         this.totalPrice = totalPrice;
     }
 
-
-    public int getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(int totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-
     public String getStatus() {
         return status;
     }
@@ -53,14 +43,21 @@ public class OrdersEntity {
         this.status = status;
     }
 
+    public UsersEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UsersEntity user) {
+        this.user = user;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrdersEntity that = (OrdersEntity) o;
-        return idOrder == that.idOrder &&
+        return orderNumber == that.orderNumber &&
                 Double.compare(that.totalPrice, totalPrice) == 0 &&
-                totalAmount == that.totalAmount &&
                 Objects.equals(status, that.status);
     }
 
