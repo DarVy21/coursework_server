@@ -28,8 +28,16 @@ public class BookEntity implements Serializable{
 
     public BookEntity(){}
 
-    public BookEntity(int idbook, String name, String author, String type, int price ,int amount){
+    public BookEntity(int idbook, String name, String author, String type, int amount,double price ){
         this.id_book=idbook;
+        this.type=type;
+        this.name=name;
+        this.author=author;
+        this.amount=amount;
+        this.price=price;
+    }
+    public BookEntity( String name, String author, String type,int amount,double price ){
+
         this.type=type;
         this.name=name;
         this.author=author;
