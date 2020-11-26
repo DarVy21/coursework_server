@@ -27,7 +27,6 @@ public class UsersEntity implements Serializable {
             cascade = CascadeType.ALL)
     private List<OrdersEntity> ordersEntities;
 
-
     public UsersEntity(){}
     public UsersEntity(int idUser, String login, String password){
         this.id_user=idUser;

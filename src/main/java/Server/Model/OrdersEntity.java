@@ -12,6 +12,8 @@ public class OrdersEntity {
     private int orderNumber;
     @Column(name = "total_price")
     private double totalPrice;
+    @Column(name = "total_amount")
+    private int totalAmount;
     @Column(name = "status")
     private String status="в обработке";
     @ManyToOne (fetch=FetchType.LAZY)
@@ -33,6 +35,14 @@ public class OrdersEntity {
 
     public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public int getTotalAmount() {
+        return totalAmount;
+    }
+
+    public void setTotalAmount(int totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public String getStatus() {

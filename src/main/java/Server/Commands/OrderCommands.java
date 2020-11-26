@@ -35,9 +35,10 @@ public class OrderCommands {
         ArrayList<String> list2=new ArrayList<>();
         for (OrdersEntity order:list) {
             String status=order.getStatus();
+            String amount= String.valueOf(order.getTotalAmount());
             String price= String.valueOf(order.getTotalPrice());
             String orderNumber= String.valueOf(order.getOrderNumber());
-            list2.add(orderNumber+","+price+","+status);
+            list2.add(orderNumber+","+amount+","+price+","+status);
         }
         return list2;
     }
@@ -48,12 +49,16 @@ public class OrderCommands {
         List<UsersEntity> user= session.createQuery("FROM UsersEntity WHERE id_user=:id").setParameter("id",idUser).list();
         List<BasketEntity> list=session.createQuery("FROM BasketEntity where user.id_user=:id").setParameter("id",idUser).list();
         session.close();
-        int totalPrice=0;
-        for (BasketEntity basket:list)
-            totalPrice+=basket.getPrice();
+        double totalPrice=0;
+        int totalAmount=0;
+        for (BasketEntity basket:list) {
+            totalPrice += basket.getPrice();
+            totalAmount += basket.getAmount();
+        }
         OrdersEntity order=new OrdersEntity();
         order.setUser(user.get(0));
         order.setTotalPrice(totalPrice);
+        order.setTotalAmount(totalAmount);
         OrderCommands.save(order);
         return "success";
     }

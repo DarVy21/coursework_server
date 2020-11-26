@@ -1,7 +1,7 @@
 package Server.Commands;
 
-
 import Server.Database.HibernateSessionFactoryUtil;
+
 import Server.Model.BookEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BookCommands {
-    public static java.io.Serializable split(String command) {
+    public static Object split(String command) {
         String[] commandNumber = command.split(",", 2);
         String[] commands;
-        java.io.Serializable result = true;
+        Object result = true;
         switch (commandNumber[1]) {
             case "ShowBook":
                 result = BookCommands.showBook();
@@ -22,29 +22,20 @@ public class BookCommands {
         return result;
     }
 
-    private static ArrayList<String> showBook() {
-        List<BookEntity> list = null;
+    private static Object showBook() {
+        List<BookEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from BookEntity ").list();
         ArrayList<String> list2=new ArrayList<>();
-        try {
-            list = HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                    createQuery("from BookEntity").list();
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
         for (BookEntity book:list) {
             String id= String.valueOf(book.getId_book());
-            String name=book.getName();
             String author=book.getAuthor();
             String type=book.getType();
-            String price= String.valueOf(book.getPrice());
+            String name=book.getName();
             String amount= String.valueOf(book.getAmount());
-
-            list2.add(id+","+name+","+author+","+type+","+price+","+amount);
-
+            String price= String.valueOf(book.getPrice());
+            list2.add(id+","+name+","+author+","+type+","+amount+","+price);
         }
         return list2;
-
     }
     public static void updateBook(BookEntity book){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
