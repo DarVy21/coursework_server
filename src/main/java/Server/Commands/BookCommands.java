@@ -30,7 +30,6 @@ public class BookCommands {
     }
 
     private static String addBook(String nameS,String authorS, String typeS, String amountS,String priceS) {
-
         BookEntity book = new BookEntity(nameS, authorS, typeS, Integer.parseInt(amountS), Double.parseDouble(priceS));
         BookCommands.save(book);
         return "success";

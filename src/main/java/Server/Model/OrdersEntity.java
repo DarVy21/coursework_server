@@ -1,11 +1,14 @@
 package Server.Model;
 
+import javafx.fxml.Initializable;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-public class OrdersEntity {
+public class OrdersEntity  {
     @Id
     @Column(name = "order_number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +55,7 @@ public class OrdersEntity {
     public void setStatus(String status) {
         this.status = status;
     }
+
 
     public UsersEntity getUser() {
         return user;
