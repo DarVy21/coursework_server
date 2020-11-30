@@ -1,5 +1,7 @@
 package Server.Model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;

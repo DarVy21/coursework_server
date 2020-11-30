@@ -1,5 +1,6 @@
 package Server.Model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import javafx.fxml.Initializable;
 
 import javax.persistence.*;

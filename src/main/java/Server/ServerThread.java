@@ -1,24 +1,27 @@
 package Server;
 
-import Server.Commands.Commands;
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
+import Server.Commands.Commands;
 
 
 public class ServerThread extends Thread {
     private Socket clientSocket;
-    private ObjectOutputStream output = null;
-    private ObjectInputStream input = null;
+    private static ObjectOutputStream output = null;
+    private static ObjectInputStream input = null;
 
     public ServerThread(Socket clientSocket)  {
         this.clientSocket = clientSocket;
     }
 
-
+    public static ObjectInputStream getInput() {
+        return input;
+    }
+    public static ObjectOutputStream getOutput() {
+        return output;
+    }
     public void run()
     {
         try {
