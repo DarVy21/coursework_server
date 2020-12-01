@@ -1,10 +1,7 @@
 package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
-import Server.Model.BasketEntity;
-import Server.Model.BookEntity;
-import Server.Model.OrdersEntity;
-import Server.Model.UsersEntity;
+import Server.Model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -34,6 +31,14 @@ public class OrderCommands {
                 commands = command.split(",", 4);
                 result = OrderCommands.changeStatus(commands[2],commands[3]);
                 break;
+            case "showPrice":
+                commands = command.split(",", 3);
+                result = OrderCommands.showPrice(commands[2]);
+                break;
+            case "discountPrice":
+                commands = command.split(",", 4);
+                result = OrderCommands.discountPrice(commands[2],commands[3]);
+                break;
         }
         return result;
     }
@@ -47,6 +52,38 @@ public class OrderCommands {
         OrderCommands.updateOrder(orderT);
         return "success";
 
+    }
+    private static String discountPrice(String idUserS,String promocodS){
+        int idUser= Integer.parseInt(idUserS);
+        Session session= HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<OrdersEntity> list= session.createQuery("FROM OrdersEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
+        List<DiscountEntity> discList=session.createQuery("FROM DiscountEntity where promocod=:id").setParameter("id",promocodS).list();
+        session.close();
+        if (discList.size() ==0 ) {
+            return "fail";
+        }
+        else {
+            OrdersEntity order = (OrdersEntity) list.get(list.size() - 1);
+            DiscountEntity discEnt = (DiscountEntity) discList.get(0);
+            int discountSize = discEnt.getDiscountSize();
+            double price = order.getTotalPrice();
+            double discountPrice = price * ((100 - discountSize) * 0.01);
+            order.setTotalPrice(discountPrice);
+            OrderCommands.updateOrder(order);
+            String result = String.valueOf(discountPrice);
+            return result;
+        }
+
+    }
+
+    private static String showPrice(String idString) {
+        int idUser= Integer.parseInt(idString);
+        List<OrdersEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("from OrdersEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
+         OrdersEntity order = (OrdersEntity) list.get(list.size()-1);
+        String result = String.valueOf(order.getTotalPrice());
+
+        return result;
     }
 
     private static Object showOrder(String idString) {

@@ -17,6 +17,7 @@
     <mapping class="Server.Model.BasketEntity"/>
     <mapping class="Server.Model.OrdersEntity"/>
     <mapping class="Server.Model.AdminEntity"/>
+    <mapping class="Server.Model.DiscountEntity"/>
 
   </session-factory>
 </hibernate-configuration>

@@ -21,6 +21,9 @@ public class Commands {
             case "Order":
                 result = OrderCommands.split(command);
                 break;
+            case "Discount":
+                result = DiscountCommands.split(command);
+                break;
         }
         return result;
     }
