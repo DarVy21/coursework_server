@@ -2,13 +2,9 @@ package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
 
-import Server.Model.DiscountEntity;
-import Server.Model.OrdersEntity;
+import Server.Entities.DiscountEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DiscountCommands {
     public static Object split(String command) {
@@ -54,32 +50,15 @@ public class DiscountCommands {
         return "success";
     }
 
-    private static Object showDiscountAdmin() {
-        List<DiscountEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+    private static Object showDiscountAdmin () {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from DiscountEntity ").list();
-        ArrayList<String> list2=new ArrayList<>();
-        for (DiscountEntity discount:list) {
-            String id_discount= String.valueOf(discount.getId_discount());
-            String idUser= String.valueOf(discount.getUser_id());
-            String promocod=discount.getPromocod();
-            String discountSize=String.valueOf(discount.getDiscountSize());
-            list2.add(id_discount+","+promocod+","+discountSize+","+idUser);
-        }
-        return list2;
+
     }
     private static Object showDiscount(String idString) {
         int idUser= Integer.parseInt(idString);
-        List<DiscountEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from DiscountEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
-        // OrdersEntity order = (OrdersEntity) list.get(0);
-        ArrayList<String> list2=new ArrayList<>();
-        for (DiscountEntity discount:list) {
-            String id_discount= String.valueOf(discount.getId_discount());
-            String promocod=discount.getPromocod();
-            String discountSize=String.valueOf(discount.getDiscountSize());
-            list2.add(id_discount+","+promocod+","+discountSize);
-        }
-        return list2;
     }
     public static void updateDiscount(DiscountEntity discount){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();

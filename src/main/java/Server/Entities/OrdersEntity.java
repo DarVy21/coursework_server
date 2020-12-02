@@ -1,7 +1,4 @@
-package Server.Model;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import javafx.fxml.Initializable;
+package Server.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,7 +6,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-public class OrdersEntity  {
+public class OrdersEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "order_number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +21,14 @@ public class OrdersEntity  {
     @ManyToOne (fetch=FetchType.LAZY)
     @JoinColumn (name = "user_name", referencedColumnName = "login")
     private UsersEntity user;
+    public OrdersEntity(int totalAmount, double totalPrice, UsersEntity user,String status) {
+        this.status=status;
+        this.totalAmount=totalAmount;
+        this.totalPrice = totalPrice;
+        this.user = user;
+    }
+
+    public OrdersEntity() {}
 
     public int getOrderNumber() {
         return orderNumber;
@@ -69,11 +75,16 @@ public class OrdersEntity  {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof OrdersEntity)) return false;
         OrdersEntity that = (OrdersEntity) o;
-        return orderNumber == that.orderNumber &&
-                Double.compare(that.totalPrice, totalPrice) == 0 &&
-                Objects.equals(status, that.status);
+        return getOrderNumber() == that.getOrderNumber() &&
+                Double.compare(that.getTotalPrice(), getTotalPrice()) == 0 &&
+                getTotalAmount() == that.getTotalAmount() &&
+                getStatus().equals(that.getStatus());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getOrderNumber(), getTotalPrice(), getTotalAmount(), getStatus());
+    }
 }

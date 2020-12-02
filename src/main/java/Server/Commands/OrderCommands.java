@@ -1,12 +1,10 @@
 package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
-import Server.Model.*;
+import Server.Entities.*;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OrderCommands {
@@ -88,33 +86,16 @@ public class OrderCommands {
 
     private static Object showOrder(String idString) {
         int idUser= Integer.parseInt(idString);
-        List<OrdersEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from OrdersEntity WHERE user.id_user=:id").setParameter("id",idUser).list();
-       // OrdersEntity order = (OrdersEntity) list.get(0);
-        ArrayList<String> list2=new ArrayList<>();
-        for (OrdersEntity order:list) {
-            String status=order.getStatus();
-            String amount= String.valueOf(order.getTotalAmount());
-            String price= String.valueOf(order.getTotalPrice());
-            String orderNumber= String.valueOf(order.getOrderNumber());
-            list2.add(orderNumber+","+amount+","+price+","+status);
-        }
-        return list2;
     }
-    private static Object showOrderAdmin() {
 
-        List<OrdersEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
+    private static Object showOrderAdmin () {
+        return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from OrdersEntity ").list();
-        ArrayList<String> list2=new ArrayList<>();
-        for (OrdersEntity order:list) {
-            String status=order.getStatus();
-            String amount= String.valueOf(order.getTotalAmount());
-            String price= String.valueOf(order.getTotalPrice());
-            String orderNumber= String.valueOf(order.getOrderNumber());
-            list2.add(orderNumber+","+amount+","+price+","+status);
-        }
-        return list2;
+
     }
+
 
     private static String addToOrder(String idUserString) {
         int idUser= Integer.parseInt(idUserString);
@@ -133,6 +114,7 @@ public class OrderCommands {
         order.setTotalPrice(totalPrice);
         order.setTotalAmount(totalAmount);
         OrderCommands.save(order);
+        BasketCommands.deleteAll(idUser);
         return "success";
     }
     private static void save(OrdersEntity order) {
@@ -153,15 +135,6 @@ public class OrderCommands {
         session.update(order);
         tx1.commit();
         session.close();
-    }
-
-    public static Object findOrdersById(int id) {
-        return HibernateSessionFactoryUtil.getSessionFactory().openSession().get(OrdersEntity.class, id);
-    }
-
-    public static List<OrdersEntity> findAll() {
-        List<OrdersEntity> orders = (List<OrdersEntity>)  HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From OrdersEntity").list();
-        return orders;
     }
 
 

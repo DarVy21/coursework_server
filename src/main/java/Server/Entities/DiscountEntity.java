@@ -1,11 +1,13 @@
-package Server.Model;
+package Server.Entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "discounts")
-public class DiscountEntity {
+public class DiscountEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_discount;

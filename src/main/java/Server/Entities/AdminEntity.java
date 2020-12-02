@@ -1,4 +1,4 @@
-package Server.Model;
+package Server.Entities;
 
 import javax.persistence.*;
 
@@ -9,10 +9,14 @@ public class AdminEntity {
     @Column(name = "id_admin")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAdmin;
-    @ManyToOne(fetch= FetchType.LAZY,
-            cascade= CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id_user")
+    @ManyToOne (fetch=FetchType.LAZY,
+            cascade=CascadeType.ALL)
+    @JoinColumn (name = "user_id", referencedColumnName = "id_user")
     private UsersEntity user;
+
+    public AdminEntity(UsersEntity user) {
+        this.user = user;
+    }
 
     public AdminEntity() {}
 

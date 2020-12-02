@@ -1,4 +1,4 @@
-package Server.Model;
+package Server.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -6,6 +6,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "baskets")
 public class BasketEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id_basket")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +22,13 @@ public class BasketEntity implements Serializable {
     @JoinColumn (name = "book_name", referencedColumnName = "name")
     private BookEntity book;
     public BasketEntity(){}
+
+    public BasketEntity(double price, int amount, UsersEntity user, BookEntity book) {
+        this.price = price;
+        this.amount = amount;
+        this.user = user;
+        this.book = book;
+    }
 
     public int getIdBasket() {
         return idBasket;
@@ -53,12 +61,12 @@ public class BasketEntity implements Serializable {
         return user;
     }
 
-    public BookEntity getBook() {
-        return book;
-    }
-
     public void setBook(BookEntity book) {
         this.book = book;
+    }
+
+    public BookEntity getBook() {
+        return book;
     }
 
     @Override

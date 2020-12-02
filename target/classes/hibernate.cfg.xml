@@ -12,12 +12,12 @@
     <property name="hibernate.show_sql">true</property>
     <property name="show_sql">true</property>
 
-    <mapping class="Server.Model.BookEntity"/>
-    <mapping class="Server.Model.UsersEntity"/>
-    <mapping class="Server.Model.BasketEntity"/>
-    <mapping class="Server.Model.OrdersEntity"/>
-    <mapping class="Server.Model.AdminEntity"/>
-    <mapping class="Server.Model.DiscountEntity"/>
+    <mapping class="Server.Entities.BookEntity"/>
+    <mapping class="Server.Entities.UsersEntity"/>
+    <mapping class="Server.Entities.BasketEntity"/>
+    <mapping class="Server.Entities.OrdersEntity"/>
+    <mapping class="Server.Entities.AdminEntity"/>
+    <mapping class="Server.Entities.DiscountEntity"/>
 
   </session-factory>
 </hibernate-configuration>

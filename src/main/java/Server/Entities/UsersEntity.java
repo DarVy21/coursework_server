@@ -1,14 +1,14 @@
-package Server.Model;
-
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
+package Server.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
 public class UsersEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_user;
@@ -36,6 +36,12 @@ public class UsersEntity implements Serializable {
     public UsersEntity(){}
     public UsersEntity(int idUser, String login, String password){
         this.id_user=idUser;
+        this.password=password;
+        this.login=login;
+    }
+
+    public UsersEntity( String login, String password){
+
         this.password=password;
         this.login=login;
     }
@@ -100,14 +106,15 @@ public class UsersEntity implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof UsersEntity)) return false;
         UsersEntity that = (UsersEntity) o;
+        return id_user == that.id_user &&
+                getLogin().equals(that.getLogin()) &&
+                getPassword().equals(that.getPassword());
+    }
 
-        if (id_user != that.id_user) return false;
-        if (login != null ? !login.equals(that.login) : that.login != null) return false;
-        if (password != null ? !password.equals(that.password) : that.password != null) return false;
-
-        return true;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id_user, getLogin(), getPassword());
     }
 }

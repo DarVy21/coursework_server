@@ -1,13 +1,15 @@
-package Server.Model;
+package Server.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
 @Table(name = "books")
 public class BookEntity implements Serializable{
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id_book;
@@ -108,17 +110,18 @@ public class BookEntity implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
+        if (!(o instanceof BookEntity)) return false;
         BookEntity that = (BookEntity) o;
-
-        if (id_book != that.id_book) return false;
-        if (amount != that.amount) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (name != null ? !name.equals(that.name) : that.name != null) return false;
-        if (price!= that.price) return false;
-
-        return true;
+        return getId_book() == that.getId_book() &&
+                getAmount() == that.getAmount() &&
+                Double.compare(that.getPrice(), getPrice()) == 0 &&
+                getName().equals(that.getName()) &&
+                getAuthor().equals(that.getAuthor()) &&
+                getType().equals(that.getType());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId_book(), getName(), getAuthor(), getType(), getAmount(), getPrice());
+    }
 }
