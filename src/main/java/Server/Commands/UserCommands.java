@@ -1,12 +1,14 @@
 package Server.Commands;
 
 import Server.Database.HibernateSessionFactoryUtil;
+
 import Server.Entities.AdminEntity;
 import Server.Entities.UsersEntity;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserCommands {
@@ -17,11 +19,11 @@ public class UserCommands {
         switch (commandNumber[1]) {
             case "checkSingInClient":
                 commands = command.split(",", 4);
-                result = UserCommands.checkSingInClient(commands[2], commands[3]);
+                result = UserCommands.checkSingInClient(commands[2],commands[3]);
                 break;
             case "checkSingInAdmin":
                 commands = command.split(",", 4);
-                result = UserCommands.checkSingInAdmin(commands[2], commands[3]);
+                result = UserCommands.checkSingInAdmin(commands[2],commands[3]);
                 break;
             case "checkLogin":
                 commands = command.split(",", 3);
@@ -47,16 +49,16 @@ public class UserCommands {
     }
 
     private static String addAdmin(String login, String password) {
-        UsersEntity user = new UsersEntity(login, password);
-        AdminEntity admin = new AdminEntity(user);
+        UsersEntity user = new UsersEntity(login,password);
+        AdminEntity admin=new AdminEntity(user);
         UserCommands.save(admin);
         return "success";
     }
 
     private static String deleteUser(String idUserString) {
-        int idUSer = Integer.parseInt(idUserString);
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        UsersEntity user = session.get(UsersEntity.class, idUSer);
+        int idUSer= Integer.parseInt(idUserString);
+        Session session=HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        UsersEntity user=session.get(UsersEntity.class,idUSer);
         session.close();
         UserCommands.delete(user);
         return "success";
@@ -68,32 +70,32 @@ public class UserCommands {
     }
 
     private static String addClient(String login, String password) {
-        UsersEntity user = new UsersEntity(login, password);
+        UsersEntity user = new UsersEntity(login,password);
         UserCommands.save(user);
         return "success";
     }
 
     private static String checkSingLogin(String loginTemp) {
-        List<UsersEntity> list = null;
-        list = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        List<UsersEntity> list =null;
+        list=HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from UsersEntity where login=:name").setParameter("name", loginTemp).list();
-        if (list != null) return "success";
+        if(list!= null) return "success";
         else return "fail";
     }
 
     public static String checkSingInClient(String login, String password) {
-        List<UsersEntity> users = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        UsersEntity users= (UsersEntity) HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("FROM UsersEntity where login=:log and password=:pas").
-                setParameter("log", login).setParameter("pas", password).list();
-        if (users == null) return "fail";
-        return String.valueOf(users.get(0).getIdUser());
+                setParameter("log",login).setParameter("pas",password).uniqueResult();
+        if(users==null)return "fail";
+        return String.valueOf(users.getIdUser());
     }
 
     public static String checkSingInAdmin(String login, String password) {
-        List<AdminEntity> admin = HibernateSessionFactoryUtil.getSessionFactory().openSession().
+        AdminEntity admin= (AdminEntity) HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("FROM AdminEntity where  user.login=:log and user.password=:pas").
-                setParameter("log", login).setParameter("pas", password).list();
-        if (admin == null) return "fail";
+                setParameter("log",login).setParameter("pas",password).uniqueResult();
+        if(admin==null) return"fail";
         return "successAdmin";
     }
 
@@ -104,7 +106,6 @@ public class UserCommands {
         tx1.commit();
         session.close();
     }
-
     private static void delete(UsersEntity user) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();

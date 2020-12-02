@@ -30,7 +30,6 @@ public class BookCommands {
                 commands = command.split(",", 3);
                 result = BookCommands.editBook(commands[2]);
                 break;
-
         }
         return result;
     }
@@ -39,18 +38,18 @@ public class BookCommands {
         int id = Integer.parseInt(idString);
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         BookEntity book = session.get(BookEntity.class, id);
+        session.close();
         if (book == null) return "fail";
         try {
             ServerThread.getOutput().writeObject(book);
-
-            //ProductCommands.updateProduct(product.get(0));
-        } catch (IOException e) {
+            book= (BookEntity) ServerThread.getInput().readObject();
+            BookCommands.updateBook(book);
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-
-            return "success";
         }
-        return null;
+        return "success";
     }
+
 
     private static String deleteBook(String idString) {
         int id= Integer.parseInt(idString);
