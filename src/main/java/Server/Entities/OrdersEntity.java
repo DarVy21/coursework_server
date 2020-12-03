@@ -2,6 +2,7 @@ package Server.Entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -18,14 +19,28 @@ public class OrdersEntity implements Serializable {
     private int totalAmount;
     @Column(name = "status")
     private String status="в обработке";
+
     @ManyToOne (fetch=FetchType.LAZY)
     @JoinColumn (name = "user_name", referencedColumnName = "login")
     private UsersEntity user;
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "order",
+            cascade = CascadeType.ALL)
+    private List<NotificationEntity> notificationEntities;
+
     public OrdersEntity(int totalAmount, double totalPrice, UsersEntity user,String status) {
         this.status=status;
         this.totalAmount=totalAmount;
         this.totalPrice = totalPrice;
         this.user = user;
+    }
+
+    public List<NotificationEntity> getNotificationEntities() {
+        return notificationEntities;
+    }
+
+    public void setNotificationEntities(List<NotificationEntity> notificationEntities) {
+        this.notificationEntities = notificationEntities;
     }
 
     public OrdersEntity() {}

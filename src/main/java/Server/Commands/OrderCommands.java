@@ -21,6 +21,10 @@ public class OrderCommands {
                 commands = command.split(",", 3);
                 result = OrderCommands.showOrder(commands[2]);
                 break;
+            case "showNotifications":
+                commands = command.split(",", 3);
+                result = OrderCommands.showNotifications(commands[2]);
+                break;
             case "showOrderAdmin":
                 commands = command.split(",", 2);
                 result = OrderCommands.showOrderAdmin();
@@ -43,14 +47,45 @@ public class OrderCommands {
 
     private static String changeStatus(String idOrderS,String statusOrderS){
         int idOrder= Integer.parseInt(idOrderS);
-        List<OrdersEntity> list =HibernateSessionFactoryUtil.getSessionFactory().openSession().
-                createQuery("from OrdersEntity WHERE orderNumber=:id").setParameter("id",idOrder).list();
-        OrdersEntity orderT = (OrdersEntity) list.get(0);
-        orderT.setStatus(statusOrderS);
-        OrderCommands.updateOrder(orderT);
+        try {
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            List<OrdersEntity> list = session.createQuery("from OrdersEntity WHERE orderNumber=:id").setParameter("id", idOrder).list();
+            OrdersEntity order = (OrdersEntity) list.get(0);
+            order.setStatus(statusOrderS);
+            session.close();
+            OrderCommands.updateOrder(order);
+            String orderNumber= String.valueOf(order.getOrderNumber());
+            String status = order.getStatus();
+            String message = "изменение статуса в заказе №" + orderNumber;
+           if (!status.equals("В обработке")){
+                NotificationEntity notification= new NotificationEntity(order.getUser().getLogin(),order.getOrderNumber(),message);
+                OrderCommands.save(notification);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
         return "success";
 
     }
+
+    private static List<String> showNotifications(String idString) {
+        int idUser= Integer.parseInt(idString);
+        Session session= HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        List<String> list= session. createQuery("select message from NotificationEntity WHERE order.user.id_user=:id").setParameter("id",idUser).list();
+        List<NotificationEntity> listnot= session. createQuery("from NotificationEntity WHERE order.user.id_user=:id").setParameter("id",idUser).list();
+        session.close();
+        for (NotificationEntity not: listnot){
+            OrderCommands.delete(not);
+        }
+       return list;
+
+
+
+    }
+
     private static String discountPrice(String idUserS,String promocodS){
         int idUser= Integer.parseInt(idUserS);
         Session session= HibernateSessionFactoryUtil.getSessionFactory().openSession();
@@ -129,10 +164,29 @@ public class OrderCommands {
             e.printStackTrace();
         }
     }
+    private static void save(NotificationEntity notification) {
+        try {
+
+            Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+            Transaction tx1 = session.beginTransaction();
+            session.save(notification);
+            tx1.commit();
+            session.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void updateOrder(OrdersEntity order){
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
         session.update(order);
+        tx1.commit();
+        session.close();
+    }
+    private static void delete(NotificationEntity notification) {
+        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
+        Transaction tx1 = session.beginTransaction();
+        session.delete(notification);
         tx1.commit();
         session.close();
     }

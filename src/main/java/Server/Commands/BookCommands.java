@@ -8,6 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookCommands {
     public static Object split(String command) {
@@ -29,6 +33,9 @@ public class BookCommands {
             case "editBook":
                 commands = command.split(",", 3);
                 result = BookCommands.editBook(commands[2]);
+                break;
+            case "showTypes":
+                result = BookCommands.showTypes();
                 break;
         }
         return result;
@@ -70,6 +77,47 @@ public class BookCommands {
     private static Object showBook () {
         return HibernateSessionFactoryUtil.getSessionFactory().openSession().
                 createQuery("from BookEntity ").list();
+
+    }
+    private static ArrayList<String> showTypes () {
+        List<String> listType= HibernateSessionFactoryUtil.getSessionFactory().openSession().
+                createQuery("select type from BookEntity ").list();
+        double novel = 0;
+        double detective = 0;
+        double science = 0;
+        double utopia = 0;
+        double antiutopia = 0;
+        double psychology = 0;
+        double other = 0;
+
+            for (String type:listType){
+                if (type.equals("Роман")) novel ++;
+                if (type.equals("Детектив")) detective ++;
+                if (type.equals("Научные")) science ++;
+                if (type.equals("Утопия")) utopia ++;
+                if (type.equals("Антиутопия")) antiutopia ++;
+                if (type.equals("Психология")) psychology ++;
+                if (type.equals("Другое")) other ++;
+
+            }
+            ArrayList<String> list = new ArrayList<>();
+            double all =(novel+detective + science + utopia+ antiutopia + psychology + other);
+            double novelPart = novel / all;
+            double detectivePart = detective / all;
+            double sciencePart = science / all;
+            double antiutopiaPart = antiutopia /all;
+            double psychologyPart = psychology / all;
+            double utopiaPart = utopia / all;
+            double otherPart = other / all;
+            list.add(Double.toString(novelPart));
+            list.add(Double.toString(detectivePart));
+            list.add(Double.toString(sciencePart));
+            list.add(Double.toString(antiutopiaPart));
+            list.add(Double.toString(psychologyPart));
+            list.add(Double.toString(utopiaPart));
+            list.add(Double.toString(otherPart));
+
+        return list;
 
     }
     public static void updateBook(BookEntity book){
